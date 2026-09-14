@@ -396,6 +396,11 @@ Honest caveats:
 | `docs/origin-brief.md` | The original architecture brief that started the project |
 | [`docs/screenshots/`](docs/screenshots/README.md) | Capture protocol, the published figures and their attribution record |
 
+- **Running, verifying and resuming work on this project:**
+  [`plans/project-handover-and-resumption.md`](plans/project-handover-and-resumption.md) records the
+  frozen state, how to bring the project back up, the verification gate, the open work queue and the
+  resumption protocol.
+
 ## Limitations and non-goals
 
 - **Not a medical device, and not a clinical tool.** No diagnosis, no risk score, no
