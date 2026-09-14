@@ -133,13 +133,52 @@ what the owner must still configure by hand.
   ~27.8 MB (~6.6 MB gzipped). This is within GitHub Pages' limits and is the
   documented cost of browser-local ONNX inference; it is noted so the figure is
   not mistaken for a build defect later.
-- **First-run failure mode, expected and documented.** Until the owner sets
-  **Settings → Pages → Source = "GitHub Actions"**, the deploy step cannot
-  create or find a Pages site and the workflow run will fail. This is expected
-  on first publication and is not a defect in the workflow. The remediation is
-  to set that source and re-run the failed workflow; no commit is needed.
-  (Whether that failure actually occurred, and its exact message, is
-  unverified from this environment — it can only be observed after the push.)
+- **First-run failure mode, expected, documented and now observed.** Until the
+  owner sets **Settings → Pages → Source = "GitHub Actions"**, the deploy step
+  cannot find a Pages site and the workflow run fails. This is expected on first
+  publication and is not a defect in the workflow. The remediation is to set
+  that source and re-run the failed workflow; no commit is needed.
+- **Outcome (2026-09-14).** Pushing `672fde6` triggered run `34851198976`
+  (`Deploy to GitHub Pages`, event `push`, branch `main`), which completed with
+  `conclusion: failure`. Steps 1–5 succeeded — `Set up job`, `Checkout`,
+  `Set up Node`, `Install dependencies` (`npm ci`) and
+  `Build the static site under the repository sub-path`
+  (`npm run build -- --base=/ECG-Analyzer/`) — then step 6 `Configure Pages`
+  failed and steps 7–8 were skipped. The failure annotations read:
+
+  ```text
+  HttpError: Not Found - https://docs.github.com/rest/pages/pages#get-a-apiname-pages-site
+  HttpError :: Get Pages site failed. Please verify that the repository has Pages
+  enabled and configured to build using GitHub Actions, or consider exploring the
+  `enablement` parameter for this action.
+  ```
+
+  `GET /repos/manwell47/ECG-Analyzer/pages` returned `404` independently at that
+  time, consistent with Pages not yet being enabled. This is the documented
+  first-run state: the workflow failed loudly instead of publishing under a
+  broken configuration.
+- **Owner remediation performed (2026-09-14).** The owner enabled Pages for the
+  repository and selected the **"GitHub Actions"** build source, as required by
+  the failure message above, and authorised proceeding. This is recorded as the
+  owner's report rather than as an independently verified setting: the anonymous
+  `GET /repos/manwell47/ECG-Analyzer/pages` request still returns `404` after the
+  change, and that endpoint may require authentication regardless of state, so it
+  cannot discriminate between "disabled" and "enabled". The authoritative check
+  is therefore the next workflow run, which must pass `Configure Pages` for the
+  publication to be established. Until that run is observed, the live URL remains
+  unverified.
+- **The same run narrowed one assumption in decision (e).** `npm ci` and the
+  sub-path build both executed successfully on `ubuntu-latest`, so the artifact
+  that would be published is now known to compile on the CI platform and not
+  only on Windows. The test suite still has not been run there, so the decision
+  to omit a test gate continues to rest on an untested assumption — a narrower
+  one than before.
+- The run's annotations also carried a non-fatal warning that
+  `actions/checkout@v4`, `actions/setup-node@v4` and `actions/configure-pages@v5`
+  target Node.js 20 and are being forced to run on Node.js 24. It did not fail
+  the run and did not affect the steps that succeeded. No action version was
+  changed in response, the versions being fixed by design here. Recorded so a
+  recurrence is recognised rather than re-investigated.
 - **The launcher is CRLF in the working tree.** `.gitattributes` gains
   `*.cmd text eol=crlf` alongside the existing `* text=auto eol=lf`, so the
   batch file is stored LF-normalised like every other text file but checked out
