@@ -53,16 +53,27 @@ detail. This ADR makes it explicit and inspectable.
    `npm run check` passes, after an evidenced check that no path under
    `data/raw/` or `data/processed/` is staged. The evidence is
    `git check-ignore -v` matching those paths plus a staged-path audit.
-8. **One attributed, dataset-derived figure is permitted in the interface
-   screenshots** (owner decision, 2026-09-14; recorded under the rules §61 override
-   protocol). The narrow reading of item 2 admitted only project-derived artifacts.
-   It now additionally admits a rendered screenshot of a real MIT-BIH recording,
-   subject to three conditions: mandatory attribution (record id, channel,
-   "MIT-BIH Arrhythmia Database", PhysioNet, ODC-BY 1.0, source URL); no patient
-   metadata from the `.hea` header comments inside the frame; and no raw dataset
-   bytes entering the repository. Item 2 is otherwise unweakened — this shows a
-   recording, it does not redistribute one. The operative conditions live in
-   `docs/screenshots/README.md`.
+8. **A limited set of attributed, dataset-derived figures is permitted in the
+   interface screenshots** (owner decision, 2026-09-14; recorded under the rules §61
+   override protocol). The narrow reading of item 2 admitted only project-derived
+   artifacts. It now additionally admits rendered screenshots of a real MIT-BIH
+   recording: three of the four figures published in the Screenshots section of
+   `README.md` — `02-open-local-record.png`, `03-time-series.png` and
+   `04-dwt-coefficients.png`, all rendering record `100`, channel `MLII` — while the
+   remaining figure, `01-app-startup.png`, stays the project-derived synthetic-UI
+   capture unrelated to any dataset. The owner widened the scope from one figure to
+   this set on 2026-09-14 by instructing that the uploaded captures be published; the
+   earlier wording of this item admitted one. This is a widening of scope only, not a
+   relaxation of any condition. Every dataset-derived figure is subject to the same
+   three conditions: mandatory attribution (record id, channel, "MIT-BIH Arrhythmia
+   Database", PhysioNet, ODC-BY 1.0, source URL); no patient metadata from the `.hea`
+   header comments inside the frame; and no raw dataset bytes entering the repository.
+   Item 2 is otherwise unweakened — this shows a recording, it does not redistribute
+   one. The operative conditions live in `docs/screenshots/README.md`. The constraint
+   is binding for the future: any further dataset-derived figure requires a new owner
+   decision recorded in this item, and each such figure must carry the same four
+   ODC-BY 1.0 elements — the database title, the source URI, the licence name and
+   URI, and an indication of modification.
 
 ## Consequences
 

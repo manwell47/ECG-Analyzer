@@ -82,11 +82,14 @@ the decision rather than decoration:
   demographic and medication information — record `100`'s comments, for instance,
   state age/sex/height/weight and two drug names. Header text, metadata tables and
   annotation-derived patient information must never enter the frame.
-- **The figure count is a live constraint.** `ADR-022` item 8 authorised *one*
-  attributed dataset-derived figure. The published set contains three. This is a
-  genuine governance gap, recorded in "Divergence from the pre-capture plan" below
-  and deliberately left for the project owner rather than papered over with a new
-  ADR from inside a documentation task.
+- **The figure count is bounded by the decision.** `ADR-022` item 8 was first
+  written for *one* attributed dataset-derived figure, while the published set
+  contains three. The project owner resolved that gap on 2026-09-14 by instructing
+  that the uploaded captures be published, and item 8 has since been amended to admit
+  this set while restating the same three conditions unchanged. The three
+  dataset-derived figures named in this file — `02-open-local-record.png`,
+  `03-time-series.png` and `04-dwt-coefficients.png` — are therefore the authorised
+  set; a further one would need a new owner decision recorded in item 8.
 
 ## Procedure (Windows 11, human, real browser)
 
@@ -231,14 +234,15 @@ What was decided, and why:
   slot is retired.** No capture in the published set shows a completed probe
   prediction, so the reserved name was moved to the first free index to keep the
   published sequence gap-free while still reserving the capture that is missing.
-- **The gap against `ADR-022` item 8 is recorded, not resolved.**
-  [`ADR-022`](../../plans/adr/ADR-022-repository-publication-and-licensing.md) item 8 permitted
-  exactly one attributed dataset-derived figure; the published set contains three.
-  Resolving it is an owner decision with two possible directions — broaden the ADR's
-  allowance for a multi-step attributed set, or reduce the published set to one
-  dataset-derived figure — and neither belongs to this task. Creating a new ADR from
-  inside a documentation change would bury the decision instead of surfacing it, which
-  rules §60 forbids.
+- **The gap against `ADR-022` item 8 is closed by an owner decision.**
+  [`ADR-022`](../../plans/adr/ADR-022-repository-publication-and-licensing.md) item 8 was written
+  for exactly one attributed dataset-derived figure; the published set contains three. On
+  2026-09-14 the project owner instructed that the uploaded captures be published, and that
+  instruction is what widened the scope: item 8 has been amended to admit this set and to
+  restate the same three conditions, binding any further dataset-derived figure to a new owner
+  decision recorded there. The sequence stays honest — the item admitted one, reality ran ahead
+  of the plan, and the decision was brought up to date rather than the figures being cut back
+  to fit a stale limit.
 
 ## Attribution conditions for the published figures
 
