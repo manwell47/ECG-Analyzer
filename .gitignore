@@ -1,0 +1,21 @@
+# Biomedical datasets (large, license-restricted) are never committed.
+# data/fixtures/ holds SMALL, license-appropriate derived golden artifacts and
+# IS committed (see data/fixtures/reference/README.md for provenance).
+/data/raw/
+/data/processed/
+
+# Node / build output
+node_modules/
+dist/
+coverage/
+
+# Raw benchmark output (Phase 9): per-machine, timing-dependent JSON from
+# `vitest bench` is never committed. The committed artifacts are the policy doc,
+# the labelled baseline snapshot, and ADR-010 — not the raw runs.
+/bench-results/
+
+# Logs & OS noise
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db

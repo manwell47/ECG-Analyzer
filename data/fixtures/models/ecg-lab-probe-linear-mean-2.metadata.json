@@ -1,0 +1,45 @@
+{
+  "modelId": "ecg-lab-probe-linear-mean-2",
+  "modelVersion": "1.0.0",
+  "task": "probe-sign-of-mean (development seam-validation; not a physiological classifier)",
+  "input": {
+    "name": "signal",
+    "shape": [
+      360
+    ],
+    "dtype": "float32",
+    "layout": "samples"
+  },
+  "expectedSamplingRateHz": 360,
+  "expectedChannels": 1,
+  "expectedWindowSamples": 360,
+  "preprocessingAssumptions": [
+    {
+      "stage": "identity-window",
+      "config": {
+        "channelCount": 1,
+        "windowSamples": 360,
+        "sampleRateHz": 360,
+        "note": "Probe consumes the raw prepared window with no filtering, resampling or segmentation."
+      }
+    }
+  ],
+  "normalization": {
+    "strategy": "none"
+  },
+  "output": {
+    "name": "logits",
+    "dtype": "float32",
+    "semantics": "logits",
+    "activation": "softmax",
+    "classLabels": [
+      "positive-mean",
+      "nonpositive-mean"
+    ]
+  },
+  "provenance": {
+    "trainingDataset": "Not trained - synthetic deterministic probe, no data involved",
+    "methodology": "One-layer deterministic graph (opset 13): output logits = [+sum, -sum] of the float32 input window; softmax argmax is the sign of the window mean. Built by onnx 1.22.0 via generate-probe-model.py; purpose is to exercise the ONNX Runtime Web seam end-to-end (Signal -> ModelInput -> session -> interpret). It is a test oracle, not a scientific model.",
+    "limitations": "Development seam-validation probe only. Has no physiological or clinical meaning and must never be used to inform any medical or scientific conclusion."
+  }
+}

@@ -1,0 +1,17 @@
+# Line-ending normalisation.
+#
+# This repository is authored on Windows but is consumed on every platform, so
+# text is stored LF-only in the object database and checked out with LF
+# everywhere. Without this, the first cross-machine checkout rewrites every file
+# and produces whitespace-only diffs.
+* text=auto eol=lf
+
+# Binary assets: never apply line-ending conversion and never diff as text.
+# The WFDB extensions are listed for completeness even though data/raw/ is
+# gitignored and must never be committed.
+*.onnx binary
+*.dat binary
+*.atr binary
+*.xws binary
+*.png binary
+*.ico binary

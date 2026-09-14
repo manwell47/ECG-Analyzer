@@ -1,0 +1,55 @@
+{
+  "formatVersion": 1,
+  "generatorVersion": "ecg-lab-fixtures/1.0.0",
+  "wavelet": "db4",
+  "order": 4,
+  "tapCount": 8,
+  "generatedAtIso": "2026-09-03T21:42:57.689Z",
+  "provenance": "Daubechies-4 decomposition filters, literature-standard tap ordering (as used by wavelib, PyWavelets and MATLAB db4). Cross-read from the wavelib-derived SIGIL WaveletProcessor.cpp Db4 taps; high/low + reconstruction pairs derived here via QMF. Numerical DWT decomposition reference vectors against the native wavelib library are a Phase-4 external-capture gate (not fabricated in the meantime).",
+  "dec_lo": [
+    0.230377813308855,
+    0.714846570552542,
+    0.63088076792959,
+    -0.027983769416984,
+    -0.187034811718881,
+    0.030841381835987,
+    0.032883011666983,
+    -0.010597401784997
+  ],
+  "dec_hi": [
+    -0.010597401784997,
+    -0.032883011666983,
+    0.030841381835987,
+    0.187034811718881,
+    -0.027983769416984,
+    -0.63088076792959,
+    0.714846570552542,
+    -0.230377813308855
+  ],
+  "rec_lo": [
+    -0.010597401784997,
+    0.032883011666983,
+    0.030841381835987,
+    -0.187034811718881,
+    -0.027983769416984,
+    0.63088076792959,
+    0.714846570552542,
+    0.230377813308855
+  ],
+  "rec_hi": [
+    -0.230377813308855,
+    0.714846570552542,
+    -0.63088076792959,
+    -0.027983769416984,
+    0.187034811718881,
+    0.030841381835987,
+    -0.032883011666983,
+    -0.010597401784997
+  ],
+  "invariants": {
+    "sumDecLo": 1.414213562373095,
+    "sumSquaresDecLo": 0.9999999999990662,
+    "sumDecHi": 9.71445146547012e-16,
+    "sumSquaresDecHi": 0.9999999999990662
+  }
+}
