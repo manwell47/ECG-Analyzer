@@ -6,6 +6,13 @@
 # and produces whitespace-only diffs.
 * text=auto eol=lf
 
+# Windows batch files are the exception: cmd.exe parses them line by line, and
+# LF-only batch files can misbehave around labels and `goto`. They are stored
+# LF-normalised in the object database (like every other text file) but checked
+# out with CRLF in the working tree, which is the form the script interpreter
+# expects.
+*.cmd text eol=crlf
+
 # Binary assets: never apply line-ending conversion and never diff as text.
 # The WFDB extensions are listed for completeness even though data/raw/ is
 # gitignored and must never be committed.

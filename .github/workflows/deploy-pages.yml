@@ -1,0 +1,62 @@
+# GitHub Pages deployment of the static build (ADR-023).
+#
+# Design constraints, recorded here rather than left implicit:
+#
+#  - The `/ECG-Analyzer/` sub-path is supplied as a Vite CLI flag at build time,
+#    NOT by changing `vite.config.ts`. `npm run dev`, `npm test` and a plain
+#    `npm run build` therefore keep their current `/` base (AGENTS.md §25, §26:
+#    no architectural change is made for a deployment concern).
+#  - There is deliberately NO typecheck/lint/test gate in this workflow. The
+#    suite has only ever been executed on Windows, the project's development
+#    host; whether it passes on `ubuntu-latest` is unverified, and gating
+#    publication on an unverified assumption would make the published URL
+#    fragile. A build failure still blocks deployment, so whatever is published
+#    is always a successfully compiled artifact (ADR-023 (e)).
+#  - Deployment uses the official Pages actions only: no `gh-pages` branch and
+#    no committed `dist/`, so there is exactly one publication mechanism.
+name: Deploy to GitHub Pages
+
+on:
+    push:
+        branches: [main]
+    workflow_dispatch:
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+# One Pages deployment at a time. `cancel-in-progress: false` because a
+# cancelled deployment can leave the published site half-updated; a queued run
+# is preferable to an interrupted one.
+concurrency:
+    group: pages
+    cancel-in-progress: false
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Set up Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: npm
+            - name: Install dependencies
+              run: npm ci
+            - name: Build the static site under the repository sub-path
+              run: npm run build -- --base=/ECG-Analyzer/
+            - name: Configure Pages
+              uses: actions/configure-pages@v5
+            - name: Upload the build artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: dist
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
