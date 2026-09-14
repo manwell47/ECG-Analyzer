@@ -164,9 +164,55 @@ what the owner must still configure by hand.
   `GET /repos/manwell47/ECG-Analyzer/pages` request still returns `404` after the
   change, and that endpoint may require authentication regardless of state, so it
   cannot discriminate between "disabled" and "enabled". The authoritative check
-  is therefore the next workflow run, which must pass `Configure Pages` for the
-  publication to be established. Until that run is observed, the live URL remains
-  unverified.
+  was therefore the next workflow run, which is recorded below: it passed
+  `Configure Pages`, and the live URL was then verified to serve the build.
+- **Outcome (2026-09-14), second run.** Pushing `d965d53` triggered run
+  `34851802345` (event `push`, branch `main`), which completed with
+  `conclusion: success`. All eight steps succeeded: `Set up job`, `Checkout`,
+  `Set up Node`, `Install dependencies` (`npm ci`), `Build the static site under
+  the repository sub-path`, `Configure Pages`, `Upload the build artifact` and
+  `Deploy to GitHub Pages`. The publication is therefore established.
+- **Live URL verified over HTTP (2026-09-14).** `GET
+  https://manwell47.github.io/ECG-Analyzer/` returned `200` with `699` bytes and
+  references `/ECG-Analyzer/assets/index-Bl0-PYdx.js` and
+  `/ECG-Analyzer/assets/index-CxGJqhzD.css`; both returned `200` (`140321` and
+  `5105` bytes). The served entry chunk names the same worker assets as the local
+  build — `dsp.worker-C8ScdWi1.js` and `inference.worker-sRezLjrx.js`, both `200`
+  — the inference worker names `ort.bundle.min-C982Pftf.js` (`200`, `414088`
+  bytes) and `ecg-lab-probe-linear-mean-2-DdYE4umo.onnx` (`200`, `543` bytes,
+  `application/octet-stream`), and the hashed WASM binary
+  `ort-wasm-simd-threaded.jsep-D-icqfN-.wasm` returned `200` as
+  `application/wasm` with `27797172` bytes. Every asset the deployed page
+  references therefore exists at the path by which it is referenced.
+- **What that verification does not establish.** It is an HTTP-level check of
+  file presence, path resolution and content type only. No browser loaded the
+  page in this task, so whether the application boots, whether the workers start,
+  and whether ONNX inference produces output in the deployed environment remain
+  unverified; per ADR-017 that is a recorded real-browser observation, never an
+  automated gate.
+- **Local and CI hashes differ for the two Svelte-compiled entry assets, with the
+  cause established.** The local sub-path build emits `index-C01abYeI.css` and
+  `index-Cr4s7SMa.js`, while CI emitted `index-CxGJqhzD.css` and
+  `index-Bl0-PYdx.js`; the other five assets (both workers, the ORT chunk, the
+  WASM binary and the ONNX fixture) have byte-identical hashes in both builds. The
+  difference is Svelte's scoped-CSS class suffix, which is derived from the source
+  file's absolute path and therefore from the build machine
+  (`.svelte-1umj2h3` locally versus `.svelte-t7s451` in CI): a byte-level
+  comparison of the two stylesheets diverges first at byte 23, inside the very
+  first scoped selector. Version drift is excluded — the lockfile and the
+  installed tree agree exactly (`svelte 5.57.0`, `vite 6.4.3`,
+  `@sveltejs/vite-plugin-svelte 5.1.1`, `rollup 4.63.1`, `esbuild 0.25.12`) — as
+  are line endings (every artifact contains zero CR bytes) and the base path (both
+  builds used `/ECG-Analyzer/`). Nothing scientific depends on these names, each
+  build is internally self-consistent, and the local build is deterministic (two
+  runs produced identical hashes). Recorded so that a future local-versus-CI hash
+  comparison is not mistaken for a regression.
+- **Every push to `main` redeploys.** Since the trigger is a push to `main`, a
+  change that does not affect the application — this ADR included — rebuilds and
+  republishes the site. Accepted: the redeploy is cheap (about a minute) and keeps
+  the URL from drifting behind the branch. A build failure on `main` leaves the
+  previous deployment serving, because `deploy-pages` never runs when an earlier
+  step fails — the behaviour run `34851198976` already demonstrated.
 - **The same run narrowed one assumption in decision (e).** `npm ci` and the
   sub-path build both executed successfully on `ubuntu-latest`, so the artifact
   that would be published is now known to compile on the CI platform and not
