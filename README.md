@@ -3,6 +3,15 @@
 A browser-first, local-first laboratory for ECG signal processing, wavelet analysis
 and ONNX model inference. Signals are ingested, transformed and analysed entirely on
 the user's machine; nothing is uploaded, because there is no server to upload to.
+                                ✓ WFDB / EDF+
+                                ✓ DSP preprocessing
+                                ✓ DWT / db4
+                                ✓ ONNX Runtime Web
+                                ✓ Web Workers
+                                ✓ Local-first / no upload
+                                ✓ 838 tests
+                                ✓ Reproducible experiments
+                                ✓ TypeScript + Svelte
 
 | | |
 | --- | --- |
