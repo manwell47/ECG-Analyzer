@@ -53,6 +53,16 @@ detail. This ADR makes it explicit and inspectable.
    `npm run check` passes, after an evidenced check that no path under
    `data/raw/` or `data/processed/` is staged. The evidence is
    `git check-ignore -v` matching those paths plus a staged-path audit.
+8. **One attributed, dataset-derived figure is permitted in the interface
+   screenshots** (owner decision, 2026-09-14; recorded under the rules §61 override
+   protocol). The narrow reading of item 2 admitted only project-derived artifacts.
+   It now additionally admits a rendered screenshot of a real MIT-BIH recording,
+   subject to three conditions: mandatory attribution (record id, channel,
+   "MIT-BIH Arrhythmia Database", PhysioNet, ODC-BY 1.0, source URL); no patient
+   metadata from the `.hea` header comments inside the frame; and no raw dataset
+   bytes entering the repository. Item 2 is otherwise unweakened — this shows a
+   recording, it does not redistribute one. The operative conditions live in
+   `docs/screenshots/README.md`.
 
 ## Consequences
 
@@ -78,6 +88,14 @@ detail. This ADR makes it explicit and inspectable.
   reconciliation was needed. A post-push audit of the pushed tree itself
   (`git ls-tree -r origin/main`) confirmed its only `data/` entries are the seven
   `data/fixtures/*` files. The commit identity was set repo-locally only.
+- The permitted real-record figure is a rendering of a third-party recording, not a
+  redistribution of a dataset, so item 2's exclusion still holds. Attribution is a
+  licensing obligation under ODC-BY 1.0 as well as a provenance one (AGENTS.md §28):
+  a figure published without it would be a defect, not an omission. Because the image
+  is an interface capture and not a scientific assertion, no test asserts on it
+  (rules §35); the conditions are therefore enforced by the capture protocol and by
+  review, which is a weaker guarantee and is accepted as such. No code changed, so
+  there was no testable behaviour to cover.
 
 ## References
 
@@ -86,3 +104,4 @@ detail. This ADR makes it explicit and inspectable.
 - ADR-006 (dataset abstraction), ADR-017 (manual verification is not a gate)
 - `plans/repository-publication-plan.md`, `plans/phase-18-checkpoint.md`
 - `LICENSE`, `NOTICE`, `.gitattributes`, `.gitignore`
+- `docs/screenshots/README.md` (capture protocol and conditions for item 8)
