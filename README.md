@@ -162,6 +162,7 @@ may not be committed from a benchmark run.
 | `plans/adr/` | Architecture Decision Records, `ADR-001` onward |
 | `plans/repository-publication-plan.md` | Publication and licensing decisions for this repository |
 | `docs/origin-brief.md` | The original architecture brief that started the project |
+| `docs/screenshots/` | Capture protocol and holding area for the interface screenshots referenced above |
 
 ---
 
