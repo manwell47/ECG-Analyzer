@@ -71,6 +71,13 @@ detail. This ADR makes it explicit and inspectable.
   (ADR-017).
 - Future dataset additions must keep matching `.gitignore` exclusions and
   provenance documentation, or this decision is violated.
+- **Outcome (2026-09-14).** Realised as the single root commit
+  `4558bac95d12c3ae7ae47a169251a5be386ca274` on `main` — 253 files, 73,548
+  insertions — pushed to https://github.com/manwell47/ECG-Analyzer with
+  `origin/main` as upstream. The remote was empty beforehand, so no history
+  reconciliation was needed. A post-push audit of the pushed tree itself
+  (`git ls-tree -r origin/main`) confirmed its only `data/` entries are the seven
+  `data/fixtures/*` files. The commit identity was set repo-locally only.
 
 ## References
 

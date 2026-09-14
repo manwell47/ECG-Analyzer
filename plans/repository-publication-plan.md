@@ -1,6 +1,7 @@
 # Repository Publication Plan — ECG DWT Analyzer
 
-Status: proposed (Architect) — awaiting execution in Code mode.
+Status: **executed** — published 2026-09-14 to https://github.com/manwell47/ECG-Analyzer
+(commit `4558bac`). See §8 for the verified outcome.
 
 ## 1. Context
 
@@ -156,3 +157,33 @@ git push -u origin main
 | Windows line-ending churn | Step 4 `.gitattributes` |
 | README overclaims verification | Invariant I4, worded to match ADR-017 |
 | Binary fixture weight in history | Step 0 measures it before committing |
+
+## 8. Execution record
+
+Executed 2026-09-14 in Code mode. Every row below is an observation from an actual
+command, not an expectation.
+
+| Item | Result |
+| --- | --- |
+| Reconnaissance | git 2.55.0.windows.5; `init.defaultBranch` = `master`; `credential.helper` = `manager`; **no `gh` CLI**; `user.name` / `user.email` unset globally |
+| Commit identity | Set **repo-local only** — `manwell47 <manwell47@users.noreply.github.com>`, chosen by the repo owner. No global config was touched |
+| Commit payload measured | `data/fixtures` = 7 files / 461,120 bytes (largest: `reference/signals.json`, ~442 KB) |
+| Gate before commit (I2) | `npm run check` exit 0 — 66 test files / 838 tests / 181 build modules; svelte-check 0 errors / 0 warnings |
+| Remote pre-state | `git ls-remote origin` → **zero refs, no auth prompt** ⇒ remote is public and empty, so Step 10 reconciliation was a no-op (no force-push, no merge) |
+| Data-safety gate (I1) | `git check-ignore -v` matched `.gitignore:4:/data/raw/` and `.gitignore:5:/data/processed/`. Staged `data/` subset = the 7 `data/fixtures/*` files. Suspect-path scan (`node_modules`, `dist/`, `coverage`, `bench-results`) returned nothing |
+| First commit | `4558bac95d12c3ae7ae47a169251a5be386ca274` — "Initial publication: ECG DWT Analyzer (Phase 18)", 253 files, 73,548 insertions; author and committer both the identity above; working tree clean afterwards |
+| Push | `main -> main` (new branch), upstream set to `origin/main`; `git ls-remote origin` HEAD = `refs/heads/main` = `4558bac` |
+| Post-push audit of the **pushed** tree | `git ls-tree -r origin/main` → 7 `data/` entries, all under `data/fixtures/`; **zero** matches for `.dat/.atr/.xws/.hea/.edf/mitdb/processed/node_modules/dist/coverage`; 253 files total |
+| Line endings | The flood of "CRLF will be replaced by LF" warnings at `git add` time is itself the evidence that `.gitattributes` is active |
+
+Invariants at completion: **I1 satisfied** (evidenced), **I2 satisfied**, **I3 respected** (no
+history rewrite was needed, so none was performed), **I4 respected** (README describes the gate
+and the pending human passes as they are).
+
+Outstanding after publication — neither is a publication defect:
+
+- **Repository description and topics** were not set: the `gh` CLI is not installed, so this is a
+  manual step in the GitHub web UI.
+- **Manual real-browser verification** rows in `plans/phase-16-manual-verification.md`,
+  `plans/phase-17-manual-verification.md` and `plans/phase-18-manual-verification.md` remain
+  `Pending (human)` per ADR-017. Publishing the repository does not change their status.
